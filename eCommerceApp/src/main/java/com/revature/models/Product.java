@@ -1,17 +1,34 @@
 package com.revature.models;
 
 public class Product {
-    private long productId;
+    private int productId;
     private String name;
     private String description;
     private double price;
     private int stock;
 
-    public long getProductId() {
+    private static int productCounter = 1;
+    public Product(int productId, String name, String description, double price, int stock) {
+        this.productId = productId;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+
+    public Product(String name, String description, double price, int stock) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.productId =+ productCounter;
+    }
+
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(long productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
