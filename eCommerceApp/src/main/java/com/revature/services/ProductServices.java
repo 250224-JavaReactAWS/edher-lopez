@@ -34,7 +34,11 @@ public class ProductServices {
         validateRequiredStringField(product.getDescription(), "Product description");
         validatePrice(product.getPrice());
         validateStock(product.getStock());
-        return repository.update(product);
+        storedProduct.setName(product.getName());
+        storedProduct.setDescription(product.getDescription());
+        storedProduct.setPrice(product.getPrice());
+        storedProduct.setStock(product.getStock());
+        return repository.update(storedProduct);
     }
 
     public boolean deleteProduct(int productId){

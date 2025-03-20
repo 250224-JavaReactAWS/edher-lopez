@@ -75,7 +75,7 @@ public class UserDAOImp implements UserDAO{
     @Override
     public User update(User obj) {
         try (Connection conn = ConnectionUtil.getConnection()){
-            String sql = "UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ? WHERE user_id = ?";
+            String sql = "UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ? WHERE user_id = ? RETURNING *";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, obj.getFirstName());
             preparedStatement.setString(2, obj.getLastName());
