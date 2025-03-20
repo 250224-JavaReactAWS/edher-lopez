@@ -3,17 +3,44 @@ package com.revature.models;
 import java.time.LocalDateTime;
 
 public class Order {
-    private long orderId;
-    private long userId;
+    private final int orderId;
+    private int userId;
     private double totalPrice;
     private Status status;
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
+
+    private int orderCounter = 1;
+
+    public Order(int userId, double totalPrice) {
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+        this.status = Status.PENDING;
+        this.orderId = orderCounter;
+        this.createdAt = null;
+        orderCounter++;
+    }
+
+    public Order(int orderId, int userId, double totalPrice, Status status, LocalDateTime createdAt) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
     public long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

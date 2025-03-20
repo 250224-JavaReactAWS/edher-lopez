@@ -6,8 +6,8 @@ import com.revature.repos.CartDAO;
 import com.revature.repos.ProductDAO;
 
 public class CartServices {
-    private CartDAO cartRepository;
-    private ProductDAO productRepository;
+    private final CartDAO cartRepository;
+    private final ProductDAO productRepository;
 
     public CartServices(CartDAO cartRepository, ProductDAO productRepository){
         this.cartRepository = cartRepository;
