@@ -5,6 +5,7 @@ import com.revature.repos.CartDAO;
 import com.revature.repos.OrderDAO;
 import com.revature.repos.ProductDAO;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class OrderServices {
         this.productRepository = productRepository;
     }
 
-    public Order placeOrder(int userId) {
+    public Order placeOrder(int userId) throws SQLException {
         List<CartItem> cart = cartRepository.getByUserId(userId);
         List<OrderItem> orderItems = createOrderItemsList(cart);
         double totalPrice = calculateTotalPrice(orderItems);

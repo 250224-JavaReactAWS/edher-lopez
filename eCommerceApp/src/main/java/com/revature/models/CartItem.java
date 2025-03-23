@@ -30,7 +30,7 @@ public class CartItem{
         return userId;
     }
 
-    public long getCartItemId() {
+    public int getCartItemId() {
         return cartItemId;
     }
 

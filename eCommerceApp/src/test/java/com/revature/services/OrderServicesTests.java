@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.matchers.Or;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class OrderServicesTests {
     private List<Product> mockedProductList;
     private final int testUserId = 1;
     @Before
-    public void setUp(){
+    public void setUp() throws SQLException {
         mockedOrderDao = Mockito.mock(OrderDAO.class);
         mockedCartDAO = Mockito.mock(CartDAO.class);
         mockedProductDAO = Mockito.mock(ProductDAO.class);

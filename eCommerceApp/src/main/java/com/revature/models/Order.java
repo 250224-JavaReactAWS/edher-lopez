@@ -36,7 +36,7 @@ public class Order {
         return createdAt;
     }
 
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
