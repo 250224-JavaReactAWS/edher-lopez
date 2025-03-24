@@ -39,3 +39,6 @@ build/
 
 ##Properties file
 **/src/main/resources/application.properties
+
+#Logs
+logs/

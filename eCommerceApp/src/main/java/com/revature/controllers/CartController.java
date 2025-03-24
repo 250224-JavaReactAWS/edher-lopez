@@ -4,8 +4,11 @@ import com.revature.dtos.response.ErrorMessage;
 import com.revature.models.CartItem;
 import com.revature.services.CartServices;
 import io.javalin.http.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CartController {
+    private final Logger logger = LoggerFactory.getLogger(CartController.class);
     private final CartServices cartServices;
 
     public  CartController(CartServices cartServices){
@@ -16,6 +19,7 @@ public class CartController {
         Integer userId = ctx.sessionAttribute("userId");
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("Someone tried to add a product to his car");
             return;
         }
         CartItem itemRequest = ctx.bodyAsClass(CartItem.class);
@@ -23,6 +27,7 @@ public class CartController {
             CartItem savedItem = cartServices.addProductToCart(itemRequest.getProductId(), userId, itemRequest.getQuantity());
             if(savedItem == null){
                 ctx.json(new ErrorMessage("Something went wrong!")).status(500);
+                logger.warn("Something went wrong while trying to insert a CartItem");
                 return;
             }
             ctx.json(savedItem).status(201);
@@ -35,6 +40,7 @@ public class CartController {
         Integer userId = ctx.sessionAttribute("userId");
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("Someone tried to remove a product from his car");
             return;
         }
         try {
@@ -42,6 +48,7 @@ public class CartController {
             boolean result = cartServices.deleteCartItem(cartItemId, userId);
             if(!result){
                 ctx.json(new ErrorMessage("Something went wrong")).status(500);
+                logger.warn("Something went wrong while trying to remove a CartItem");
                 return;
             }
             ctx.status(204);
@@ -56,6 +63,7 @@ public class CartController {
         Integer userId = ctx.sessionAttribute("userId");
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("Someone tried to update a product from his car");
             return;
         }
         try {
@@ -68,6 +76,7 @@ public class CartController {
             CartItem updatedCartItem = cartServices.updateCartItemQuantity(userId ,cartItemId, requestCartItem.getQuantity());
             if(updatedCartItem == null){
                 ctx.json(new ErrorMessage("Something went wrong")).status(500);
+                logger.warn("Something went wrong while trying to update a CartItem");
                 return;
             }
             ctx.json(updatedCartItem).status(200);

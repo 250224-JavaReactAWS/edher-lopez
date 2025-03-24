@@ -120,11 +120,36 @@ public class OrderDAOImp implements  OrderDAO{
 
     @Override
     public Order getById(int id) {
+        try(Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * FROM orders WHERE order_id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return createOrderFromResultSet(resultSet);
+            }
+        }catch (SQLException e) {
+            System.out.println("Could not get orders");
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public Order update(Order obj) {
+        try(Connection conn = ConnectionUtil.getConnection()){
+            String sql = "UPDATE orders SET status = ? WHERE order_id = ? RETURNING *";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, obj.getStatus().toString());
+            preparedStatement.setInt(2, obj.getOrderId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return createOrderFromResultSet(resultSet);
+            }
+        }catch (SQLException e) {
+            System.out.println("Could not update order");
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -139,7 +164,7 @@ public class OrderDAOImp implements  OrderDAO{
                 return true;
             }
         }catch (SQLException e) {
-            System.out.println("Could not get orders");
+            System.out.println("Could not delete order");
             e.printStackTrace();
         }
         return false;

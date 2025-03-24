@@ -58,14 +58,6 @@ public class OrderServices {
         return orderRepository.getByUserId(userId);
     }
 
-    public Order viewOrder(int orderId, int userId){
-        Order storedOrder = orderRepository.getById(orderId);
-        if(storedOrder != null && storedOrder.getUserId() == userId){
-            return storedOrder;
-        }
-        return null;
-    }
-
 
     private List<OrderItem> createOrderItemsList(List<CartItem> cart){
         List<Product> products = getProductsFoundInCart(cart);

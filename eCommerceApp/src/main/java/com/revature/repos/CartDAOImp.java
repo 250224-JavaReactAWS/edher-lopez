@@ -91,9 +91,10 @@ public class CartDAOImp implements CartDAO{
     @Override
     public CartItem update(CartItem obj) {
         try(Connection conn = ConnectionUtil.getConnection()){
-            String sql = "UPDATE cart_items SET quantity = ? WHERE cart_item_id = ? RETURNIN *";
+            String sql = "UPDATE cart_items SET quantity = ? WHERE cart_item_id = ? RETURNING *";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, obj.getCartItemId());
+            preparedStatement.setInt(1, obj.getQuantity());
+            preparedStatement.setInt(2, obj.getCartItemId());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
                 return createCartItemFromResultSet(resultSet);

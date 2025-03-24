@@ -5,10 +5,13 @@ import com.revature.models.Product;
 import com.revature.models.Role;
 import com.revature.services.ProductServices;
 import io.javalin.http.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class ProductController {
+    private final Logger logger = LoggerFactory.getLogger(ProductController.class);
     private final ProductServices productServices;
 
     public ProductController(ProductServices productServices){
@@ -18,6 +21,7 @@ public class ProductController {
     public void viewProducts(Context ctx){
         if(ctx.sessionAttribute("userId")==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("An not logged in user tried to view products");
         }
         List<Product> products = productServices.listProducts();
         ctx.json(products).status(200);
@@ -26,6 +30,7 @@ public class ProductController {
     public void viewProductDetails(Context ctx){
         if(ctx.sessionAttribute("userId")==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("An not logged in user tried to view product details");
             return;
         }
         int productId = Integer.parseInt(ctx.pathParam("productId"));
@@ -40,21 +45,25 @@ public class ProductController {
     public void addProductToCatalog(Context ctx){
         if(ctx.sessionAttribute("userId")==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("An not logged in user tried to add a product");
             return;
         }
-        if(Role.valueOf(ctx.sessionAttribute("role")) != Role.ADMIN){
+        if(!Role.ADMIN.equals(ctx.sessionAttribute("role"))){
             ctx.json(new ErrorMessage("You are not allowed access this feature!")).status(403);
+            logger.info("A not admin user tried to add a product");
             return;
         }
         Product requestProduct = ctx.bodyAsClass(Product.class);
         if(requestProduct==null){
             ctx.json(new ErrorMessage("Could not get needed information from request")).status(400);
+            logger.info("Could not get needed information from request");
             return;
         }
         try{
             Product savedProduct = productServices.addProduct(requestProduct);
             if(savedProduct == null){
                 ctx.json(new ErrorMessage("Something went wrong")).status(500);
+                logger.warn("Something went wrong while trying to save a product");
                 return;
             }
             ctx.json(savedProduct).status(201);
@@ -66,10 +75,12 @@ public class ProductController {
     public void updateProduct(Context ctx){
         if(ctx.sessionAttribute("userId")==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("An not logged in user tried to update a product");
             return;
         }
-        if(Role.valueOf(ctx.sessionAttribute("role")) != Role.ADMIN){
+        if(!Role.ADMIN.equals(ctx.sessionAttribute("role"))){
             ctx.json(new ErrorMessage("You are not allowed access this feature!")).status(403);
+            logger.info("A not admin user tried to update a product");
             return;
         }
         Product requestProduct = ctx.bodyAsClass(Product.class);
@@ -82,6 +93,7 @@ public class ProductController {
             Product savedProduct = productServices.updateProduct(requestProduct);
             if(savedProduct == null){
                 ctx.json(new ErrorMessage("Something went wrong")).status(500);
+                logger.warn("Something went wrong while trying to update a product");
                 return;
             }
             ctx.json(savedProduct).status(201);
@@ -93,10 +105,12 @@ public class ProductController {
     public void deleteProduct(Context ctx){
         if(ctx.sessionAttribute("userId")==null){
             ctx.json(new ErrorMessage("You must be logged in to access this feature")).status(401);
+            logger.info("An not logged in user tried to delete a product");
             return;
         }
-        if(Role.valueOf(ctx.sessionAttribute("role")) != Role.ADMIN){
+        if(!Role.ADMIN.equals(ctx.sessionAttribute("role"))){
             ctx.json(new ErrorMessage("You are not allowed access this feature!")).status(403);
+            logger.info("A not admin user tried to delete a product");
             return;
         }
 
@@ -105,6 +119,7 @@ public class ProductController {
             boolean result = productServices.deleteProduct(productId);
             if(!result){
                 ctx.json(new ErrorMessage("Something went wrong")).status(500);
+                logger.warn("Something went wrong while trying to delete a product");
                 return;
             }
             ctx.status(204);

@@ -55,14 +55,14 @@ public class OrderServicesTests {
     }
 
     @Test
-    public void placeOrderShouldReturnOrderWithGivenValues(){
+    public void placeOrderShouldReturnOrderWithGivenValues() throws SQLException{
         double expectedTotalPrice = 155 + 86.4 + 76.2;
         Order returnedOrder = orderServices.placeOrder(testUserId);
         Assert.assertEquals(expectedTotalPrice, returnedOrder.getTotalPrice(), 0.0001);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void placeOrderShouldThrowAnExceptionWhenQuantityIsHigherThanStockedProducts(){
+    public void placeOrderShouldThrowAnExceptionWhenQuantityIsHigherThanStockedProducts() throws SQLException{
         mockedCart.add(new CartItem(4, 5, testUserId, 2));
         Order returnedOrder = orderServices.placeOrder(testUserId);
     }

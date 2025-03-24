@@ -8,6 +8,8 @@ import com.revature.models.Role;
 import com.revature.models.Status;
 import com.revature.services.OrderServices;
 import io.javalin.http.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 
 
 public class OrderController {
+    private final Logger logger= LoggerFactory.getLogger(OrderController.class);
     private final OrderServices orderServices;
 
     public OrderController(OrderServices orderServices){
@@ -26,6 +29,7 @@ public class OrderController {
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this method"));
             ctx.status(401);
+            logger.info("An not logged in user tried to view order history");
             return;
         }
         List<Order> orders = orderServices.viewOrderHistory(userId);
@@ -37,6 +41,7 @@ public class OrderController {
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this method"));
             ctx.status(401);
+            logger.info("An not logged in user tried to place an order");
             return;
         }
         try {
@@ -57,10 +62,12 @@ public class OrderController {
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this method"));
             ctx.status(401);
+            logger.info("An not logged in user tried to view all orders");
             return;
         }
-        if(Role.valueOf(ctx.sessionAttribute("role")) != Role.ADMIN){
+        if(!Role.ADMIN.equals(ctx.sessionAttribute("role"))){
             ctx.json(new ErrorMessage("You are not allowed access this feature!")).status(403);
+            logger.info("A not admin user tried to view all orders");
             return;
         }
         List<String> statusQueried = ctx.queryParams("status");
@@ -68,6 +75,7 @@ public class OrderController {
             try{
                 List<Order> orders = new ArrayList<>();
                 for(String s: statusQueried){
+                    System.out.println(s);
                     orders.addAll(orderServices.viewAllOrders(Status.valueOf(s)));
                 }
                 ctx.json(orders).status(200);
@@ -85,10 +93,12 @@ public class OrderController {
         if(userId==null){
             ctx.json(new ErrorMessage("You must be logged in to access this method"));
             ctx.status(401);
+            logger.info("An not logged in user tried to update order status");
             return;
         }
-        if(Role.valueOf(ctx.sessionAttribute("role")) != Role.ADMIN){
+        if(!Role.ADMIN.equals(ctx.sessionAttribute("role"))){
             ctx.json(new ErrorMessage("You are not allowed access this feature!")).status(403);
+            logger.info("A not admin user tried to update a order status");
             return;
         }
 
@@ -102,9 +112,11 @@ public class OrderController {
             Order savedProduct = orderServices.updateOrderStatus(orderId, requestOrder.getStatus());
             if(savedProduct == null){
                 ctx.json(new ErrorMessage("Something went wrong")).status(500);
+                logger.warn("Something went wrong while trying to update an order");
                 return;
             }
             ctx.json(savedProduct).status(201);
+            logger.info("An order status was updated");
         }catch (IllegalArgumentException e){
             ctx.json(new ErrorMessage(e.getMessage())).status(400);
         }

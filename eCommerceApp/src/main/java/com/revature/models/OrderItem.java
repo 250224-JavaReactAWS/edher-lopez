@@ -8,6 +8,7 @@ public class OrderItem{
     private double price;
 
     private static int orderItemCounter = 1;
+    public OrderItem(){}
     public OrderItem(int productId, int quantity, double price) {
         this.productId = productId;
         this.quantity = quantity;

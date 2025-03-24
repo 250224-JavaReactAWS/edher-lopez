@@ -72,4 +72,15 @@ public class CartServicesTests {
         CartItem returnedCartItem = cartServices.updateCartItemQuantity(testUserId ,testCartItemId, illegalQuantity);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void updateCartItemShouldThrowIllegalArgumentExceptionWhenCartItemIsNotFound(){
+        when(mockedCartDAO.getById(90)).thenReturn(null);
+        CartItem returnedCartItem = cartServices.updateCartItemQuantity(testUserId, 90,80);
+    }
+    @Test
+    public void deleteCartItemShouldReturnTrue(){
+        when(mockedCartDAO.deleteById(anyInt())).thenReturn(true);
+        boolean result = cartServices.deleteCartItem(testCartItemId, testUserId);
+        Assert.assertTrue(result);
+    }
 }
