@@ -93,7 +93,7 @@ public class UserServices {
 
     private void validateThatEmailHasNotBeenRegistered(String email){
         if(repository.getUserByEmail(email) != null){
-            throw new IllegalArgumentException("Your email is already registered. You can log in using your password.");
+            throw new IllegalArgumentException("Your email is already registered.");
         }
     }
 

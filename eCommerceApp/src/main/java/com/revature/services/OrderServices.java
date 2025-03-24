@@ -23,6 +23,9 @@ public class OrderServices {
 
     public Order placeOrder(int userId) throws SQLException {
         List<CartItem> cart = cartRepository.getByUserId(userId);
+        if(cart.isEmpty()){
+            throw new IllegalArgumentException("You can not place an order without items");
+        }
         List<OrderItem> orderItems = createOrderItemsList(cart);
         double totalPrice = calculateTotalPrice(orderItems);
         Order order = new Order(userId, totalPrice);

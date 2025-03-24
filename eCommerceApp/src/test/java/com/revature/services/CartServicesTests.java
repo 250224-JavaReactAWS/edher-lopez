@@ -61,7 +61,7 @@ public class CartServicesTests {
     @Test
     public void updateCartItemQuantityShouldReturnCartItemWithNewQuantity(){
         int newQuantity = 8;
-        CartItem returnedCartItem = cartServices.updateCartItemQuantity(testCartItemId, newQuantity);
+        CartItem returnedCartItem = cartServices.updateCartItemQuantity(testUserId, testCartItemId, newQuantity);
         Assert.assertEquals(testCartItemId, returnedCartItem.getCartItemId());
         Assert.assertEquals(newQuantity, returnedCartItem.getQuantity());
     }
@@ -69,7 +69,7 @@ public class CartServicesTests {
     @Test(expected = IllegalArgumentException.class)
     public void updateCartItemQuantityShouldThrowAnExceptionWhenQuantityIsZero(){
         int illegalQuantity = 0;
-        CartItem returnedCartItem = cartServices.updateCartItemQuantity(testCartItemId, illegalQuantity);
+        CartItem returnedCartItem = cartServices.updateCartItemQuantity(testUserId ,testCartItemId, illegalQuantity);
     }
 
 }

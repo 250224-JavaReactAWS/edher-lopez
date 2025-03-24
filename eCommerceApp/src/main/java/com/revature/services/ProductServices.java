@@ -42,6 +42,10 @@ public class ProductServices {
     }
 
     public boolean deleteProduct(int productId){
+        Product product = repository.getById(productId);
+        if(product==null){
+            throw new IllegalArgumentException("Product was not found");
+        }
         return repository.deleteById(productId);
     }
 

@@ -81,7 +81,7 @@ public class UserDAOImp implements UserDAO{
             preparedStatement.setString(2, obj.getLastName());
             preparedStatement.setString(3, obj.getEmail());
             preparedStatement.setString(4, obj.getPassword());
-
+            preparedStatement.setInt(5, obj.getUserId());
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 return createUserFromResultSet(resultSet);

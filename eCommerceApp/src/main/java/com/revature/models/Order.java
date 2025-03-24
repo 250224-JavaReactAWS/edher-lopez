@@ -11,6 +11,11 @@ public class Order {
 
     private int orderCounter = 1;
 
+    public Order(){
+        this.orderId = orderCounter;
+        this.createdAt = null;
+        orderCounter++;
+    }
     public Order(int userId, double totalPrice) {
         this.userId = userId;
         this.totalPrice = totalPrice;

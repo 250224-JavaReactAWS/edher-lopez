@@ -19,12 +19,25 @@ public class CartServices {
         return cartRepository.create(new CartItem(productId,userId, quantity));
     }
 
-    public boolean deleteCartItem(int cartItemId){
+    public boolean deleteCartItem(int cartItemId, int userId){
+        CartItem item = cartRepository.getById(cartItemId);
+        if(item == null){
+            throw new IllegalArgumentException("Cart item was not found");
+        }
+        if(item.getUserId()!=userId){
+            throw new RuntimeException("You are not allowed to perform this operation");
+        }
         return cartRepository.deleteById(cartItemId);
     }
 
-    public CartItem updateCartItemQuantity(int cartItemId, int newQuantity) {
+    public CartItem updateCartItemQuantity(int userId, int cartItemId, int newQuantity) {
         CartItem storedCartItem = cartRepository.getById(cartItemId);
+        if(storedCartItem == null){
+            throw new IllegalArgumentException("Cart item was not found");
+        }
+        if(storedCartItem.getUserId()!=userId){
+            throw new RuntimeException("You are not allowed to perform this operation");
+        }
         validateQuantity(storedCartItem.getProductId(), newQuantity);
         storedCartItem.setQuantity(newQuantity);
         return cartRepository.update(storedCartItem);
@@ -32,6 +45,9 @@ public class CartServices {
 
     private void validateQuantity(int productId, int quantity){
         Product product = productRepository.getById(productId);
+        if (product == null){
+            throw new IllegalArgumentException("Product was not Found");
+        }
         if(product.getStock() < quantity){
             throw new IllegalArgumentException("Quantity can not be higher than stocked product");
         }
