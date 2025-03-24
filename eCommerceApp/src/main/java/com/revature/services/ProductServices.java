@@ -30,14 +30,22 @@ public class ProductServices {
 
     public Product updateProduct(Product product) {
         Product storedProduct = repository.getById(product.getProductId());
-        validateRequiredStringField(product.getName(), "Product name");
-        validateRequiredStringField(product.getDescription(), "Product description");
-        validatePrice(product.getPrice());
-        validateStock(product.getStock());
-        storedProduct.setName(product.getName());
-        storedProduct.setDescription(product.getDescription());
-        storedProduct.setPrice(product.getPrice());
-        storedProduct.setStock(product.getStock());
+        if(product.getName()!=null){
+            validateRequiredStringField(product.getName(), "Product name");
+            storedProduct.setName(product.getName());
+        }
+        if(product.getDescription() != null){
+            validateRequiredStringField(product.getDescription(), "Product description");
+            storedProduct.setDescription(product.getDescription());
+        }
+        if(product.getPrice() != 0){
+            validatePrice(product.getPrice());
+            storedProduct.setPrice(product.getPrice());
+        }
+        if(product.getStock()!=0){
+            validateStock(product.getStock());
+            storedProduct.setStock(product.getStock());
+        }
         return repository.update(storedProduct);
     }
 

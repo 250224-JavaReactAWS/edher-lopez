@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OrderDAOImp implements  OrderDAO{
@@ -160,7 +161,7 @@ public class OrderDAOImp implements  OrderDAO{
                 resultSet.getInt("user_id"),
                 resultSet.getDouble("total_price"),
                 Status.valueOf(resultSet.getString("status")),
-                resultSet.getTimestamp("created_at").toLocalDateTime()
+                new Date(resultSet.getTimestamp("created_at").getTime())
         );
     }
 }

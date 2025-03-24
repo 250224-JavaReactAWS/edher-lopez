@@ -44,19 +44,19 @@ public class JavalinUtil {
                     get("/history", orderController::viewOrderHistory);
                     post("", orderController::placeOrder);
                     get("", orderController::viewListOfAllOrders);
-                    patch("/:orderId", orderController::updateOrderStatus);
+                    patch("/{orderId}", orderController::updateOrderStatus);
                 });
                 path("/products", () ->{
                     get("", productController::viewProducts);
                     post("", productController::addProductToCatalog);
-                    get("/:productId", productController::viewProductDetails);
-                    put("/:productId", productController::updateProduct);
-                    delete("/:productId", productController::deleteProduct);
+                    get("/{productId}", productController::viewProductDetails);
+                    put("/{productId}", productController::updateProduct);
+                    delete("/{productId}", productController::deleteProduct);
                 });
                 path("/cart", () -> {
                     post("", cartController::addProductToCar);
-                    delete("/:cartItemId", cartController::removeProductFromCart);
-                    patch("/:cartItemId", cartController::updateCartItemQuantity);
+                    delete("/{cartItemId}", cartController::removeProductFromCart);
+                    patch("/{cartItemId}", cartController::updateCartItemQuantity);
                 });
             });
         }).start(port);

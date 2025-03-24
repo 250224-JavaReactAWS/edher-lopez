@@ -1,13 +1,14 @@
 package com.revature.models;
 
-import java.time.LocalDateTime;
+
+import java.util.Date;
 
 public class Order {
     private final int orderId;
     private int userId;
     private double totalPrice;
     private Status status;
-    private final LocalDateTime createdAt;
+    private final Date createdAt;
 
     private int orderCounter = 1;
 
@@ -25,7 +26,7 @@ public class Order {
         orderCounter++;
     }
 
-    public Order(int orderId, int userId, double totalPrice, Status status, LocalDateTime createdAt) {
+    public Order(int orderId, int userId, double totalPrice, Status status, Date createdAt) {
         this.orderId = orderId;
         this.userId = userId;
         this.totalPrice = totalPrice;
@@ -37,7 +38,7 @@ public class Order {
         return orderId;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
